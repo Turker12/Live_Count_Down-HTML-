@@ -1,0 +1,143 @@
+
+<html>
+
+    <head>
+        <title>24-Hour Live Countdown</title>
+        <style>
+            /* Styling for the container */
+            #countdown-container {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: linear-gradient(135deg, #87CEEB 0%, #B0E0E6 50%, #D4F1F4 100%);
+                color: #fff;
+                padding: 40px;
+                text-align: center !important;
+                z-index: 9999;
+                font-size: 22px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+                width: 350px !important;
+                height: auto;
+            }
+
+            /* Styling for the close button */
+            #close-button {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                cursor: pointer;
+                color: #fff;
+                font-size: 24px;
+            }
+
+            /* Styling for the background overlay */
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.7);
+                z-index: 9998;
+                display: none;
+            }
+
+            /* Center the countdown text */
+            #countdown {
+                margin: 30px auto 10px;
+                font-size: 38px;
+                font-weight: bold;
+                border-radius: 10px;
+                background-color: rgba(0, 0, 0.5, 0.1);
+            }
+
+            /* Style the "Season" and "SINGLE TICKETS ON SALE" titles */
+            #countdown-container .title {
+                font-size: 30px;
+                margin-bottom: 10px;
+                color: #fff;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                font-family: 'Helvetica', sans-serif;
+                font-weight: bold;
+                width: 100% !important;
+            }
+
+            #countdown-container .title-sale {
+                font-size: 28px;
+                color: #fff;
+                width: 100%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="countdown-container">
+
+            <br>
+            <div class="title title-sale">SINGLE TICKETS</div>
+            <div class="title title-sale">ON SALE IN:</div>
+
+            <div id="countdown"></div>
+            <span id="close-button" >x</span>
+        </div>
+
+        <div class="overlay"></div>
+
+        <script>
+            // Countdown function
+            function countdown() {
+                var now = new Date();
+                var midnight = new Date(
+                    now.getFullYear(),
+                    now.getMonth(),
+                    now.getDate() + 1,
+                    0, 0, 0
+                ); // Next midnight time
+
+                var countdownContainer = document.getElementById("countdown-container");
+                var countdownElement = document.getElementById("countdown");
+                var closeBtn = document.getElementById("close-button");
+                var overlay = document.querySelector(".overlay");
+
+                // Update the countdown every second
+                var interval = setInterval(function() {
+                    var currentTime = new Date();
+                    var distance = midnight - currentTime; // Time remaining until next midnight
+
+                  
+                    // Calculate time components
+                    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); //CHANGE THE HOURS 
+                    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    // Display the countdown
+                    countdownElement.innerHTML = hours + "h " + minutes + "m " + seconds + "s ";
+
+                    // Check if the countdown is over
+                    if (distance < 0) {
+                        clearInterval(interval); // Stop the countdown
+                        countdownElement.innerHTML = "Single tickets are on sale NOW!";
+                    }
+                }, 1000);
+
+                // Close the container when the close button is clicked
+                closeBtn.addEventListener("click", function() {
+                    countdownContainer.style.display = "none";
+                    overlay.style.display = "none";
+                });
+
+                // Show the countdown container and overlay
+                countdownContainer.style.display = "block";
+                overlay.style.display = "block";
+            }
+
+            // Run the countdown when the page loads
+            document.addEventListener("DOMContentLoaded", function() {
+                countdown();
+            });
+        </script>
+    </body>
